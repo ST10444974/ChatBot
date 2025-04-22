@@ -11,6 +11,8 @@ namespace CybersecurityBotPart1
         private const string WELCOME_AUDIO_FILE = "./AI_VOICE_INTRO.wav";
         private const ConsoleColor ASCII_COLOR = ConsoleColor.DarkCyan;
         private const ConsoleColor BORDER_COLOR = ConsoleColor.DarkYellow;
+        private const ConsoleColor USER_COLOR = ConsoleColor.Green;
+        private const int TYPEWRITER_DELAY = 50;
 
         static void Main(string[] args)
         {
@@ -18,7 +20,10 @@ namespace CybersecurityBotPart1
             DisplayAsciiArt();
             DisplayWelcomeMessage();
             PlayVoiceGreeting();
-           
+
+            string userName = GetUserName();
+            DisplayPersonalizedWelcome(userName);
+
         }
 
         static void InitializeConsole()
@@ -76,7 +81,7 @@ namespace CybersecurityBotPart1
                     {
                         player.Play();
                         // Wait for the audio to finish playing
-                        Thread.Sleep(30000);
+                        Thread.Sleep(4000);
                     }
                 }
                 else
@@ -92,9 +97,66 @@ namespace CybersecurityBotPart1
                 Console.WriteLine($"Audio Error: {ex.Message}");
                 Console.ResetColor();
             }
-        } 
+        }
+        static string GetUserName()
+        {
+            string userName;
+            do
+            {
+                Console.ForegroundColor = USER_COLOR;
+                Console.Write("\nPlease enter your name to begin: ");
+                Console.ForegroundColor = ConsoleColor.White;
+                userName = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrEmpty(userName))
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Please enter a valid name");
+                }
+
+            } while (string.IsNullOrEmpty(userName));
+
+            return userName;
+        }
+
+        static void DisplayPersonalizedWelcome(string userName)
+        {
+            Console.Clear();
+            DisplayAsciiArt();
+
+            Console.ForegroundColor = USER_COLOR;
+            TypeWriteEffect($"Welcome, {userName}!", TYPEWRITER_DELAY);
+
+            DrawBorder();
+            TypeWriteEffect("I'm your cybersecurity assistant here to help you:", TYPEWRITER_DELAY);
+            Console.WriteLine("- Stay safe online");
+            Console.WriteLine("- Recognize security threats");
+            Console.WriteLine("- Protect your digital identity");
+            DrawBorder();
+
+            Console.ResetColor();
+        }
+
+        static void DrawBorder()
+        {
+            Console.ForegroundColor = BORDER_COLOR;
+            Console.WriteLine("==================================================================");
+            Console.ResetColor();
+        }
+
+        static void TypeWriteEffect(string text, int delay)
+        {
+            foreach (char c in text)
+            {
+                Console.Write(c);
+                Thread.Sleep(delay);
+            }
+            Console.WriteLine();
+        }
     }
 }
+    
+
 
 
 
