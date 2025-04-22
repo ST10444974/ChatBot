@@ -92,9 +92,7 @@ namespace CybersecurityBotPart1
                 Console.WriteLine($"Audio Error: {ex.Message}");
                 Console.ResetColor();
             }
-        }
-
-        
+        } 
     }
 }
 
