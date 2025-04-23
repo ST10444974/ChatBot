@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace ChatBot
 {
+    // Handles all user interaction and UI elements
     public static class UserInteraction
     {
+        // UI color constants
         private const ConsoleColor BORDER_COLOR = ConsoleColor.DarkYellow;
         private const ConsoleColor USER_COLOR = ConsoleColor.Green;
 
+        // Gets and validates user name input
         public static string GetUserName()
         {
             string userName;
@@ -32,6 +35,7 @@ namespace ChatBot
             return userName;
         }
 
+        // Displays welcome message with user's name
         public static void WelcomeUser(string name)
         {
             Console.Clear();
@@ -45,6 +49,7 @@ namespace ChatBot
             Console.ResetColor();
         }
 
+        // Draws a horizontal border line
         public static void DrawBorder()
         {
             Console.ForegroundColor = BORDER_COLOR;
@@ -52,6 +57,7 @@ namespace ChatBot
             Console.ResetColor();
         }
 
+        // Displays exit message with security tips
         public static void Farewell()
         {
             Console.ForegroundColor = USER_COLOR;
@@ -62,5 +68,4 @@ namespace ChatBot
             Console.ResetColor();
         }
     }
-
 }
