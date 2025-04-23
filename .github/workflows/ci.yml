@@ -1,22 +1,35 @@
-name: CI
+name: C# Build and Syntax Check
 
-on: 
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on:
+ push:
+  branches: ["master"] # Change to branch you push code too
+ pull_request:
+         branches: ["master"]  
+
 
 jobs:
-  build-and-test:
-    runs-on: windows-latest
-    
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '9.0.x' 
-    
-    - name: Build
-      run: dotnet build --configuration Release
+    build:
+     runs-on: ubuntu-latest
+
+     steps:
+      - name: Chechout Code # Clones the Repo
+        uses: actions/checkout@v4
+     
+# Setup SDK.NET
+      - name: Setup SDK
+        uses: actions/setup-dotnet@v4
+        with:
+         dotnet-version: 9.0 #Change to framework used
+
+
+# Restore Dependancies
+      - name: Restore Dependancies
+        run: dotnet restore
+
+ # Run Unit Tests
+      - name: Unit Tests
+        run: dotnet test
+
+# Build Project
+      - name: Build
+        run: dotnet build --configuration Release
