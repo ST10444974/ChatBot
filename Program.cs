@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Media;       // For playing audio
-using System.Threading;   // For threading operations (if needed)
-using System.IO;          // For file I/O operations (if needed)
-using ChatBot;            // Custom namespace for chatbot functionality
+using System.Media;       
+using System.Threading;  
+using System.IO;          
 
-namespace CybersecurityBotPart1
+namespace ChatBot
 {
     class Program
     {
         static void Main()
         {
-            // Set up console appearance and title
-            Console.Title = "Cybersecurity Awareness Bot";
+            // Set up console appearance
             Console.OutputEncoding = System.Text.Encoding.UTF8;  // Support Unicode characters
             Console.CursorVisible = false;  // Hide the cursor for cleaner UI
 
