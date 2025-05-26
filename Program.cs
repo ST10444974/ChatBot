@@ -1,7 +1,11 @@
 ﻿using System;
-using System.Media;       
-using System.Threading;  
-using System.IO;          
+using System.Media;
+using System.Threading;
+using System.IO;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+
 
 namespace ChatBot
 {
@@ -9,68 +13,65 @@ namespace ChatBot
     {
         static void Main()
         {
-            // Set up console appearance
-            Console.OutputEncoding = System.Text.Encoding.UTF8;  // Support Unicode characters
-            Console.CursorVisible = false;  // Hide the cursor for cleaner UI
+            var context = new ConversationContext();
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.CursorVisible = false;
 
-            // Display ASCII image
             AsciiArtDisplay.Show();
-
-            // Print welcome message with colored formatting
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("=========================================================================================");
             Console.WriteLine("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.");
             Console.WriteLine("=========================================================================================");
-            Console.ResetColor();  // Reset to default console color
+            Console.ResetColor();
 
-            // Play welcome audio
             Audio.PlayWelcomeAudio();
-
-            // Get user's name and personalize welcome
-            string name = UserInteraction.GetUserName();
+            var name = UserInteraction.GetUserName();
             UserInteraction.WelcomeUser(name);
 
-            // Main interaction loop
             bool running = true;
             while (running)
             {
-                // Draw UI border and prompt user for input
                 UserInteraction.DrawBorder();
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{name}, ask me about cybersecurity (or 'exit'): ");
                 Console.ForegroundColor = ConsoleColor.Green;
 
-                // Get and process user input
-                string input = Console.ReadLine()?.Trim().ToLower();  
+                var input = Console.ReadLine()?.Trim() ?? "";
 
-                // Handle empty input
+                // Exit commands
+                if (input.Equals("exit", StringComparison.OrdinalIgnoreCase)
+                    || input.Equals("quit", StringComparison.OrdinalIgnoreCase)
+                    || input.Equals("bye", StringComparison.OrdinalIgnoreCase))
+                {
+                    running = false;
+                    continue;
+                }
+
                 if (string.IsNullOrEmpty(input))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Please enter a valid question.");
-                    continue;  // Skip to next iteration
+                    Console.WriteLine("Please enter something to continue.");
+                    continue;
                 }
 
-                // Get appropriate response from the cybersecurity knowledge base
-                string response = CybersecurityResponder.GetResponse(input);
+                string response;
+                try
+                {
+                    // Delegate to responder; it manages follow-ups and unknowns
+                    response = CybersecurityResponder.GetResponse(input, context);
+                }
+                catch (Exception ex)
+                {
+                    // Fallback for any unexpected errors
+                    response = "Oops—something went wrong on my end. Can you try rephrasing?";
+                    // (Optionally log ex.Message to a file or console for debugging)
+                }
 
-                // Display response with typewriter effect
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                TextEffects.TypeWriter(response, 50);  // 50ms delay between characters
-
-                // Check for exit commands
-                if (input == "exit" || input == "bye" || input == "quit")
-                    running = false;
+                TextEffects.TypeWriter(response, 30);
             }
 
-            // Display farewell message when exiting
             UserInteraction.Farewell();
         }
     }
 }
-
-
-
-
-
-

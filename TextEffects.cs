@@ -11,7 +11,7 @@ namespace ChatBot
     {
         // Prints text with typewriter effect (character-by-character)
         // delay: milliseconds between characters (default 50ms)
-        public static void TypeWriter(string text, int delay = 50)
+        public static void TypeWriter(string text, int delay = 30)
         {
             foreach (char c in text)
             {
