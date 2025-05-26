@@ -127,7 +127,7 @@ namespace ChatBot
 
         public static string GetResponse(string input, ConversationContext context)
         {
-            // 1) Sentiment detection
+            // Sentiment detection
             foreach (var kv in SentimentOpeners)
             {
                 if (Regex.IsMatch(input, $@"\b{kv.Key}\b", RegexOptions.IgnoreCase))
@@ -140,7 +140,7 @@ namespace ChatBot
         {
             var clean = Regex.Replace(input.ToLower(), @"[^\w\s'-]", "");
 
-            // —— 1) Yes/No & “tell me more” handler ——
+            // Yes/No & “tell me more” handler
             if (context.AwaitingConfirmation)
             {
                 if (Regex.IsMatch(clean, @"\b(yes|y|sure|tell me more|continue|more)\b"))
@@ -156,7 +156,7 @@ namespace ChatBot
                 }
             }
 
-            // —— 2) Memory capture ——
+            // Memory capture
             // Interest: “im interested in X” / “my favorite topic is X”
             var m1 = Regex.Match(clean, @"\b(i am|i'm|im|my)\s+(interested in|favorite topic is)\s+([a-z-]+)\b");
             if (m1.Success)
@@ -174,7 +174,7 @@ namespace ChatBot
                 return $"Thanks—I'll tailor my tips for a {level} level.";
             }
 
-            // —— 3) Topic matching —— 
+            // Topic matching 
             foreach (var (keywords, handler) in Topics)
             {
                 if (keywords.Any(kw => Regex.IsMatch(clean, $@"\b{Regex.Escape(kw)}\b")))
@@ -197,7 +197,7 @@ namespace ChatBot
                 }
             }
 
-            // —— 4) Clarification for unknown inputs —— 
+            //  Clarification for unknown inputs 
             return "I’m not sure I understand. Could you rephrase or pick one of my topics?";
         }
 
@@ -334,9 +334,10 @@ namespace ChatBot
                 "Deploy AI to flag anomalous internal messages that mimic executive style."
             }
         }
+                // Additional deep-dive mappings for other topics
             };
 
-            // Select topic deep-dive
+            // If topic found, choose appropriate level of detail
             if (deepDives.TryGetValue(ctx.CurrentTopic, out var levels))
             {
                 // Choose the appropriate level (0 or 1) based on follow-up count
@@ -346,7 +347,7 @@ namespace ChatBot
                 return $"Here’s some deeper insight on {ctx.CurrentTopic}: {tip}";
             }
 
-            // Fallback if topic isn’t in the map
+            // Generic fallback if no deep-dive mapping exists
             return ctx.FollowUpCount switch
             {
                 1 => $"Here’s some deeper insight on {ctx.CurrentTopic}: {RandomPick(new[]{

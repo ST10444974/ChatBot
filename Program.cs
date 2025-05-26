@@ -17,29 +17,45 @@ namespace ChatBot
     {
         static void Main()
         {
+            // Initialize conversation state
             var context = new ConversationContext();
+
+            // Configure console for UTF-8 output and hide cursor
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.CursorVisible = false;
 
+            // Display ASCII art and welcome message
             AsciiArtDisplay.Show();
+
+            // Print welcome header
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("=========================================================================================");
             Console.WriteLine("Hello! Welcome to the Cybersecurity Awareness Bot. I'm here to help you stay safe online.");
             Console.WriteLine("=========================================================================================");
             Console.ResetColor();
 
+            // Play welcome audio if available
             Audio.PlayWelcomeAudio();
+
+            // Prompt for and retrieve user name
             var name = UserInteraction.GetUserName();
+
+            // Show personalized welcome screen
             UserInteraction.WelcomeUser(name);
 
+            // Main interaction loop
             bool running = true;
             while (running)
             {
+                // Draw UI border for clarity
                 UserInteraction.DrawBorder();
+
+                // Prompt user for input
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{name}, ask me about cybersecurity (or 'exit'): ");
                 Console.ForegroundColor = ConsoleColor.Green;
 
+                // Read and normalize input
                 var input = Console.ReadLine()?.Trim() ?? "";
 
                 // Exit commands
@@ -51,6 +67,7 @@ namespace ChatBot
                     continue;
                 }
 
+                // Handle empty input
                 if (string.IsNullOrEmpty(input))
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -68,13 +85,14 @@ namespace ChatBot
                 {
                     // Fallback for any unexpected errors
                     response = "Oops—something went wrong on my end. Can you try rephrasing?";
-                    // (Optionally log ex.Message to a file or console for debugging)
+                    
                 }
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 TextEffects.TypeWriter(response, 30);
             }
 
+            // Show farewell message and security tips
             UserInteraction.Farewell();
         }
     }
